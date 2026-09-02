@@ -692,7 +692,7 @@ Faizan.public = mode === 'public';
     }
 });
     
-    vmd.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
+  //. vmd.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
     let quoted = message.msg ? message.msg : message;
     let mime = (message.msg || message).mimetype || '';
     let messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0];
