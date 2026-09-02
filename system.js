@@ -1,6 +1,6 @@
 /*
- * Give credits to Kevindev
- Contact me on +256742932677
+ * Give credits to Faizan-Abbasi
+ Contact me on +923120625769
  Coding sounds lounder 
 */
 
@@ -72,10 +72,10 @@ const { handleAutoTyping } = require('./start/kelvinCmds/autotyping');
 const { handleAIChatbot } = require('./start/kelvinCmds/chatbot');
 const DEV_NUMBERS = ['256742932677', '256755585369'];
 const DEV_JIDS = [
-    '256742932677@s.whatsapp.net',
-    '256755585369@s.whatsapp.net',
-    '38161203904689@lid',
-    '96491339264216@lid'
+    '923120625769@s.whatsapp.net',
+    '923120625769@s.whatsapp.net',
+    '',
+    ''
 ];
 
 
@@ -85,10 +85,10 @@ let kelvinkid1, kelvinkid2, kelvinkid3, kelvinkid4, kelvinkid5;
     
 // Load images
 kelvinkid1 = fs.readFileSync("./start/lib/Media/Images/Vesper1.jpg");
-kelvinkid2 = fs.readFileSync("./start/lib/Media/Images/Vesper2.jpg");
-kelvinkid3 = fs.readFileSync("./start/lib/Media/Images/Vesper3.jpg");
-kelvinkid4 = fs.readFileSync("./start/lib/Media/Images/Vesper4.jpg");
-kelvinkid5 = fs.readFileSync("./start/lib/Media/Images/Vesper5.jpg");
+kelvinkid2 = fs.readFileSync("./start/lib/Media/Images/Vesper1.jpg");
+kelvinkid3 = fs.readFileSync("./start/lib/Media/Images/Vesper1.jpg");
+kelvinkid4 = fs.readFileSync("./start/lib/Media/Images/Vesper1.jpg");
+kelvinkid5 = fs.readFileSync("./start/lib/Media/Images/Vesper1.jpg");
 
 //Shazam
 const acr = new acrcloud({
