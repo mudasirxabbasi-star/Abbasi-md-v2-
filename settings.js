@@ -8,7 +8,7 @@ const config = require('./start/Core/developer')
 const settings = {
   SESSION_ID: process.env.SESSION_ID || config.SESSION_ID || "", 
   ownername: process.env.OWNER_NAME || config.ownername || "Faizan Abbasi", 
-  botname: process.env.BOT_NAME || config.botname || "Vesper-Xmd", 
+  botname: process.env.BOT_NAME || config.botname || "Abbasi-md-v2-", 
   prefa: config.prefa || ['.', '!'], 
   owner: config.owner || ["923120625769"] 
 };
