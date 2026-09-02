@@ -711,11 +711,11 @@ Faizan.public = mode === 'public';
 
 > ${global.wm || '© Abbasi-md is awesome 🔥'}`;
 
-            const ownerJid = normalizeJid(Faizan.user.id);
-                await Faizan.sendMessage(ownerJid, { text: welcomeMessage });
+            const ownerJid = normalizeJid(vmd.user.id);
+await vmd.sendMessage(ownerJid, { text: welcomeMessage });
                 
                 setTimeout(() => {
-                    JoinFaizan(Faizan);
+                    JoinFaizan(vmd;
                 }, 3000);
             
             
@@ -725,7 +725,7 @@ Faizan.public = mode === 'public';
     }
 });
     
-    Faizan.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
+    vmd.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
     let quoted = message.msg ? message.msg : message;
     let mime = (message.msg || message).mimetype || '';
     let messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0];
@@ -743,7 +743,7 @@ Faizan.public = mode === 'public';
     await fs.writeFileSync(savePath, buffer);
     return savePath;
   };
-  Faizan.getFile = async (PATH, returnAsFilename) => {
+  vmd.getFile = async (PATH, returnAsFilename) => {
     let res, filename;
     const data = Buffer.isBuffer(PATH) 
         ? PATH 
