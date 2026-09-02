@@ -1,1 +1,426 @@
+/*Kelvin Tech*/
 
+const axios = require('axios');
+const {
+veniceAICommand,
+mistralAICommand,
+perplexityAICommand,
+bardAICommand,
+gpt4NanoAICommand,
+kelvinAICommand,
+claudeAICommand
+} = require('../start/kelvinCmds/ai');
+
+module.exports = [
+    {
+        command: ['generate', 'genimage', 'aiimage'],
+        operate: async ({ kelvin, m, reply, text }) => {
+            if (!text) return reply(global.mess?.notext || '*Please provide text to generate image*');
+            
+            const apiUrl = `https://api.gurusensei.workers.dev/dream?prompt=${encodeURIComponent(text)}`;
+            try {
+                await kelvin.sendMessage(m.chat, { image: { url: apiUrl } }, { quoted: m });
+            } catch (error) {
+                console.error('Error generating image:', error);
+                reply(global.mess?.error || '*Failed to generate image*');
+            }
+        }
+    },
+
+{
+    command: ['copilot'],
+    operate: async ({ kelvin, m, reply, args, prefix }) => {
+        const query = args.join(' ');
+        
+        if (!query) {
+            return reply(`*Usage:* ${prefix}copilot <question>\n*Example:* ${prefix}copilot How are you?`);
+        }
+
+        await reply(`⏳ *Thinking...*`);
+
+        try {
+            const apiUrl = `https://api.nexray.eu.cc/ai/copilot?text=${encodeURIComponent(query)}`;
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
+            if (!data.status || !data.result) {
+                throw new Error('No response from API');
+            }
+
+            await reply(data.result);
+
+        } catch (error) {
+            console.error('Copilot error:', error);
+            reply(`❌ Error: ${error.message}`);
+        }
+    }
+},
+{
+    command: ['chatgpt'],
+    operate: async ({ kelvin, m, reply, args, prefix }) => {
+        const query = args.join(' ');
+        
+        if (!query) {
+            return reply(`*Usage:* ${prefix}chatgpt <question>\n*Example:* ${prefix}chatgpt What is JavaScript?`);
+        }
+
+        await reply(`⏳ *Thinking...*`);
+        await kelvin.sendMessage(m.chat, { react: { text: "🤖", key: m.key } });
+
+        try {
+            const apiUrl = `https://api.nexray.eu.cc/ai/chatgpt?text=${encodeURIComponent(query)}`;
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+
+            if (!data.status || !data.result) {
+                throw new Error('No response from API');
+            }
+
+            await reply(data.result);
+            await kelvin.sendMessage(m.chat, { react: { text: "✅", key: m.key } });
+
+        } catch (error) {
+            console.error('ChatGPT error:', error);
+            await kelvin.sendMessage(m.chat, { react: { text: "❌", key: m.key } });
+            reply(`❌ Error: ${error.message}`);
+        }
+    }
+},
+    {
+        command: ['gpt2', 'chatgpt'],
+        operate: async ({ kelvin, m, reply, text, prefix, command }) => {
+            if (!text) return reply(`Please provide a query/question\n\nExample: ${prefix + command} what is artificial intelligence?`);
+            
+            try {
+                await kelvin.sendPresenceUpdate('composing', m.chat);
+                
+                const query = encodeURIComponent(text);
+                const apiUrl = `https://api.giftedtech.co.ke/api/ai/ai?apikey=gifted&q=${query}`;
+                
+                const { data } = await axios.get(apiUrl);
+                
+                let response;
+                
+                if (data && data.result) {
+                    response = data.result;
+                } else if (data && data.message) {
+                    response = data.message;
+                } else {
+                    response = "❌ Sorry, I couldn't process your request at the moment. Please try again later.";
+                }
+                
+                const finalResponse = `🤖 *GPT RESPONSE*\n\n${response}\n\n*Powered by Jexploit AI*`;
+                
+                reply(finalResponse);
+                
+            } catch (error) {
+                console.error('GPT Command Error:', error);
+                reply('❌ An error occurred while processing your request. Please try again later.');
+            }
+        }
+    },
+
+    // Meta AI
+    {
+        command: ['metaai'],
+        operate: async ({ kelvin, m, reply, text, prefix }) => {
+            if (!text) return reply(`❌ *Please provide a question!*\n\n📌 *Example:* ${prefix}metaai Hello, how are you?`);
+
+            try {
+                await kelvin.sendMessage(m.chat, { react: { text: "💭", key: m.key } });
+
+                const apiUrl = `https://api.nekolabs.web.id/text-generation/ai4chat?text=${encodeURIComponent(text)}`;
+                
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.success && data.result) {
+                    const replyText = `🤖 *AI Response*\n\n${data.result}\n\n⏱️ *Response Time:* ${data.responseTime || 'N/A'}`;
+                    
+                    await kelvin.sendMessage(
+                        m.chat,
+                        { text: replyText },
+                        { quoted: m }
+                    );
+                    
+                    await kelvin.sendMessage(m.chat, { react: { text: "✅", key: m.key } });
+                } else {
+                    throw new Error('No response from AI');
+                }
+                
+            } catch (error) {
+                console.error('Meta AI command error:', error);
+                await kelvin.sendMessage(m.chat, { react: { text: "❌", key: m.key } });
+                reply('❌ *Failed to get AI response. Please try again later.*');
+            }
+        }
+    },
+
+    // Llama AI
+    {
+        command: ['llama', 'llamaai'],
+        operate: async ({ kelvin, m, reply, text, q }) => {
+            const query = text || q;
+            if (!query) return reply('*Please ask me something*');
+            
+            try {
+                const response = await fetch(`https://api.privatezia.biz.id/api/ai/deepai?query=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                if (data.status && data.data) {
+                    reply(`🤖 ${data.data}`);
+                } else {
+                    reply(data.status ? 'Response received but data field is empty' : 'API returned false status');
+                }
+                
+            } catch (error) {
+                console.error('Llama AI error:', error);
+                reply('⚠️ Error processing your request');
+            }
+        }
+    },
+
+    // Blackbox AI
+    {
+        command: ['blackbox', 'bb'],
+        operate: async ({ kelvin, m, reply, text, q }) => {
+            const query = text || q;
+            if (!query) return reply('*Please ask me something*');
+            
+            try {
+                const response = await fetch(`https://api.privatezia.biz.id/api/ai/blackbox?query=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                if (data.status && data.data) {
+                    reply(`🤖 ${data.data}`);
+                } else {
+                    reply(data.status ? 'Response received but data field is empty' : 'API returned false status');
+                }
+                
+            } catch (error) {
+                console.error('Blackbox AI error:', error);
+                reply('⚠️ Error processing your request');
+            }
+        }
+    },
+
+    // DALL-E AI
+    {
+        command: ['dalle', 'luminai'],
+        operate: async ({ kelvin, m, reply, text, q }) => {
+            const query = text || q;
+            if (!query) return reply('*Please ask me something*');
+            
+            try {
+                const response = await fetch(`https://api.privatezia.biz.id/api/ai/luminai?query=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                if (data.status && data.data) {
+                    reply(`🤖 ${data.data}`);
+                } else {
+                    reply(data.status ? 'Response received but data field is empty' : 'API returned false status');
+                }
+                
+            } catch (error) {
+                console.error('DALL-E AI error:', error);
+                reply('⚠️ Error processing your request');
+            }
+        }
+    },
+
+    // Summarize AI
+    {
+        command: ['summarize', 'summary'],
+        operate: async ({ kelvin, m, reply, text, q }) => {
+            const query = text || q;
+            if (!query) return reply('*Please ask me something*');
+            
+            try {
+                const response = await fetch(`https://api.privatezia.biz.id/api/ai/ai4chat?query=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                if (data.status && data.data) {
+                    reply(`🤖 ${data.data}`);
+                } else {
+                    reply(data.status ? 'Response received but data field is empty' : 'API returned false status');
+                }
+                
+            } catch (error) {
+                console.error('Summarize AI error:', error);
+                reply('⚠️ Error processing your request');
+            }
+        }
+    },
+
+    // Mistral AI
+    {
+        command: ['mistral', 'mistralai'],
+        operate: async ({ kelvin, m, reply, text, q }) => {
+            const query = text || q;
+            if (!query) return reply('❌ Ask me something');
+            
+            try {
+                const response = await fetch(`https://api.giftedtech.co.ke/api/ai/deepseek-r1?apikey=gifted&q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                reply(data.success ? `🔍 ${data.result}` : 'Mistral AI failed to respond');
+            } catch (error) {
+                reply('❌ Mistral AI service error');
+            }
+        }
+    },
+    {
+        command: ['think'],
+        operate: async ({ kelvin, m, reply, text, q }) => {
+            try {
+                const query = text || q;
+                if (!query) {
+                    return reply('Please provide a complex question for deep thinking mode.\n\nExample: .think analyze the ethical implications of artificial intelligence in healthcare');
+                }
+
+                await reply('🧠 Microsoft Copilot is thinking deeply... This may take a moment.');
+
+                const response = await axios.get(`https://malvin-api.vercel.app/ai/copilot-think?text=${encodeURIComponent(query)}`);
+                
+                if (response.data && response.data.result) {
+                    const answer = response.data.result;
+                    
+                    await kelvin.sendMessage(m.chat, {
+                        text: `🧠 *Microsoft Copilot - Deep Thinking:*\n\n${answer}\n\n💭 *Deep analysis completed*`
+                    }, { quoted: m });
+                } else {
+                    throw new Error('Invalid response from Copilot Deep Thinking API');
+                }
+
+            } catch (error) {
+                console.error('Error in think command:', error);
+                
+                if (error.code === 'ECONNABORTED') {
+                    await reply('❌ Request timeout. Deep thinking is taking longer than expected. Please try again.');
+                } else if (error.response?.status === 429) {
+                    await reply('❌ Rate limit exceeded. Please wait before another deep thinking request.');
+                } else {
+                    await reply('❌ Failed to get deep thinking response. Please try again later.');
+                }
+            }
+        }
+    },
+
+    {
+        command: ['venice', 'vai'],
+        operate: async ({ kelvin, m, reply, args, text }) => {
+            await veniceAICommand(kelvin, m.chat, text, m);
+        }
+    },
+    {
+        command: ['mistral'],
+        operate: async ({ kelvin, m, reply, args, text }) => {
+            await mistralAICommand(kelvin, m.chat, text, m);
+        }
+    },
+    {
+        command: ['perplexity'],
+        operate: async ({ kelvin, m, reply, args, text }) => {
+            await perplexityAICommand(kelvin, m.chat, text, m);
+        }
+    },
+    {
+        command: ['bard'],
+        operate: async ({ kelvin, m, reply, args, text }) => {
+            await bardAICommand(kelvin, m.chat, text, m);
+        }
+    },
+    {
+        command: ['gpt4nano', 'gpt41nano'],
+        operate: async ({ kelvin, m, reply, args, text }) => {
+            await gpt4NanoAICommand(kelvin, m.chat, text, m);
+        }
+    },
+    {
+        command: ['kelvinai'],
+        operate: async ({ kelvin, m, reply, args, text }) => {
+            await kelvinAICommand(kelvin, m.chat, text, m);
+        }
+    },
+    {
+        command: ['claude'],
+        operate: async ({ kelvin, m, reply, args, text }) => {
+            await claudeAICommand(kelvin, m.chat, text, m);
+        }
+    },
+    {
+        command: ['gemini', 'geminai'],
+        operate: async ({ m, reply, args, kelvin }) => {
+            const text = args.join(' ');
+            
+            if (!text) return reply("*Please provide a question. Example: `.gemini Explain quantum physics*`");
+            
+            try {
+                await reply("🤔 Thinking...");
+                
+                const response = await fetch(`${global.siputzx}/api/ai/gemini?text=${encodeURIComponent(text)}&promptSystem=Act+as+a+helpful+assistant`);
+                const data = await response.json();
+                
+                if (!data.status || !data.data?.response) {
+                    return reply("❌ Failed to get response from Gemini.");
+                }
+                
+                reply(data.data.response);
+                
+            } catch (error) {
+                console.error('Gemini error:', error);
+                reply("❌ Error communicating with Gemini AI.");
+            }
+        }
+    },
+    {
+        command: ['glm', 'glm47', 'glmflash'],
+        operate: async ({ m, reply, args, kelvin }) => {
+            const text = args.join(' ');
+            
+            if (!text) return reply("*Please provide a question. Example: `.glm Introduction to JavaScript*`");
+            
+            try {
+                await reply("🤔 Thinking...");
+                
+                const response = await fetch(`${global.siputzx}/api/ai/glm47flash?prompt=${encodeURIComponent(text)}&system=You+are+a+helpful+assistant&temperature=0.7`);
+                const data = await response.json();
+                
+                if (!data.status || !data.data?.response) {
+                    return reply("❌ Failed to get response from GLM.");
+                }
+                
+                reply(data.data.response);
+                
+            } catch (error) {
+                console.error('GLM error:', error);
+                reply("❌ Error communicating with GLM AI.");
+            }
+        }
+    },
+    {
+        command: ['phi2', 'phiai'],
+        operate: async ({ m, reply, args, kelvin }) => {
+            const text = args.join(' ');
+            
+            if (!text) return reply("*Please provide a question. Example: `.phi2 How are you*`");
+            
+            try {
+                await reply("🤔 Thinking...");
+                
+                const response = await fetch(`${global.siputzx}/api/ai/phi2?prompt=${encodeURIComponent(text)}&system=You+are+a+helpful+assistant&temperature=0.7`);
+                const data = await response.json();
+                
+                if (!data.status || !data.data?.response) {
+                    return reply("❌ Failed to get response from PHI2.");
+                }
+                
+                reply(data.data.response);
+                
+            } catch (error) {
+                console.error('PHI2 error:', error);
+                reply("❌ Error communicating with PHI2 AI.");
+            }
+        }
+    }
+];

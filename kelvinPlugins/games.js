@@ -1,0 +1,401 @@
+/*Kelvin Tech*/
+
+const { getBuffer } = require('../start/lib/myfunction');
+
+function getCompatibilityMessage(score) {
+    if (score >= 900) return "Soulmates! 💞 You're perfect for each other!";
+    if (score >= 700) return "Great match! 💕 You complement each other well.";
+    if (score >= 500) return "Good potential! 💗 With some work, this could be great.";
+    if (score >= 300) return "Not bad! 💖 There's some chemistry here.";
+    return "Might need some work... 💔 But don't give up!";
+}
+
+module.exports = [
+    {
+        command: ['truth', 'truthgame', 'asktruth'],
+        operate: async ({ kelvin, m, reply, prefix, getBuffer }) => {
+            try {
+                const axios = require('axios');
+                const apiUrl = 'https://api.princetechn.com/api/fun/truth?apikey=prince';
+                const response = await axios.get(apiUrl);
+                
+                if (response.data?.success && response.data?.result) {
+                    const truth = response.data.result;
+                    const from = m.chat;
+                    
+                    try {
+                        const buffer = await getBuffer('https://i.ibb.co/305yt26/bf84f20635dedd5dde31e7e5b6983ae9.jpg');
+                        
+                        await kelvin.sendMessage(from, {
+                            image: buffer,
+                            caption: `*TRUTH*\n\n${truth}`
+                        }, { quoted: m });
+                    } catch (imgError) {
+                        await kelvin.sendMessage(from, {
+                            text: `*TRUTH*\n\n${truth}`
+                        }, { quoted: m });
+                    }
+                } else {
+                    reply('Failed to generate truth. Try again.');
+                }
+            } catch (error) {
+                console.error(error);
+                reply('Error generating truth.');
+            }
+        }
+    },
+    {
+        command: ['dare', 'truthdare', 'dareme'],
+        operate: async ({ kelvin, m, reply, prefix }) => {
+            try {
+                const axios = require('axios');
+                const apiUrl = 'https://api.princetechn.com/api/fun/dares?apikey=prince';
+                const response = await axios.get(apiUrl);
+                
+                if (response.data?.success && response.data?.result) {
+                    const dare = response.data.result;
+                    const from = m.chat;
+                    
+                    try {
+                        const buffer = await getBuffer('https://i.ibb.co/305yt26/bf84f20635dedd5dde31e7e5b6983ae9.jpg');
+                        
+                        await kelvin.sendMessage(from, {
+                            image: buffer,
+                            caption: `*DARE*\n\n${dare}`
+                        }, { quoted: m });
+                    } catch (imgError) {
+                        await kelvin.sendMessage(from, {
+                            text: `*DARE*\n\n${dare}`
+                        }, { quoted: m });
+                    }
+                } else {
+                    reply('Failed to generate dare. Try again.');
+                }
+            } catch (error) {
+                console.error(error);
+                reply('Error generating dare.');
+            }
+        }
+    },
+    {
+        command: ['compatibility', 'comp'],
+        operate: async ({ kelvin, m, reply, botNumber }) => {
+            try {
+                // Check if two users are mentioned
+                if (!m.mentionedJid || m.mentionedJid.length < 2) {
+                    return reply("Please mention two users to calculate compatibility.\nUsage: `.compatibility @user1 @user2`");
+                }
+
+                const [user1, user2] = m.mentionedJid.slice(0, 2);
+                
+                // Calculate random compatibility score (1-1000)
+                let compatibilityScore = Math.floor(Math.random() * 1000) + 1;
+
+                // Special case for bot owner
+                const ownerNumber = botNumber.replace(/[^0-9]/g, '') + '@s.whatsapp.net';
+                if (user1 === ownerNumber || user2 === ownerNumber) {
+                    compatibilityScore = 1000;
+                }
+
+                // Format the response
+                const resultMessage = 
+                    `💖 *Compatibility Result* 💖\n\n` +
+                    `@${user1.split('@')[0]} ❤️ @${user2.split('@')[0]}\n` +
+                    `Score: ${compatibilityScore}/1000\n\n` +
+                    `${getCompatibilityMessage(compatibilityScore)}`;
+
+                // Send the result
+                await kelvin.sendMessage(
+                    m.chat,
+                    { 
+                        text: resultMessage,
+                        mentions: [user1, user2]
+                    },
+                    { quoted: m }
+                );
+
+            } catch (error) {
+                console.error('Error in compatibility command:', error);
+                reply(`❌ Error: ${error.message}`);
+            }
+        }
+    },
+        {
+        command: ['lovetest', 'love', 'compatibility'],
+        operate: async ({ kelvin, m, reply, args }) => {
+            if (args.length < 2) return reply("Tag two users! Example: .lovetest @user1 @user2");
+
+            let user1 = args[0].replace("@", "") + "@s.whatsapp.net";
+            let user2 = args[1].replace("@", "") + "@s.whatsapp.net";
+
+            let lovePercent = Math.floor(Math.random() * 100) + 1;
+
+            let messages = [
+                { range: [90, 100], text: "💖 *A match made in heaven!* True love exists!" },
+                { range: [75, 89], text: "😍 *Strong connection!* This love is deep and meaningful." },
+                { range: [50, 74], text: "😊 *Good compatibility!* You both can make it work." },
+                { range: [30, 49], text: "🤔 *It's complicated!* Needs effort, but possible!" },
+                { range: [10, 29], text: "😅 *Not the best match!* Maybe try being just friends?" },
+                { range: [1, 9], text: "💔 *Uh-oh!* This love is as real as a Bollywood breakup!" }
+            ];
+
+            let loveMessage = messages.find(msg => lovePercent >= msg.range[0] && lovePercent <= msg.range[1]).text;
+
+            let message = `💘 *Love Compatibility Test* 💘\n\n❤️ *@${user1.split("@")[0]}* + *@${user2.split("@")[0]}* = *${lovePercent}%*\n${loveMessage}`;
+
+            await kelvin.sendMessage(m.chat, { 
+                text: message, 
+                mentions: [user1, user2] 
+            }, { quoted: m });
+        }
+    },
+    {
+        command: ['jokes', 'joke', 'funny'],
+        operate: async ({ kelvin, m, reply }) => {
+            try {
+                let res = await fetch("https://official-joke-api.appspot.com/random_joke");
+                let json = await res.json();
+                const joke = `${json.setup}\n\n${json.punchline}`;
+                await kelvin.sendMessage(m.chat, { text: joke }, { quoted: m });
+            } catch (error) {
+                console.error('Error fetching joke:', error);
+                reply('An error occurred while fetching a joke.');
+            }
+        }
+    },
+{
+    command: ['valentine', 'valentines', 'vday'],
+    operate: async ({ kelvin, m, reply, args, prefix }) => {
+        try {
+            const axios = require('axios');
+            const apiUrl = `https://api.princetechn.com/api/fun/valentines?apikey=prince`;
+            const response = await axios.get(apiUrl);
+            
+            if (response.data?.success && response.data?.result) {
+                reply(response.data.result);
+            } else {
+                reply('Failed to fetch valentine message.');
+            }
+        } catch (error) {
+            console.error('Valentine error:', error);
+            reply('Error fetching valentine message.');
+        }
+    }
+},
+    {
+    command: ['pickupline', 'pickup', 'lovequotes'],
+    operate: async ({ kelvin, m, reply, args, prefix }) => {
+        try {
+            const apiUrl = `https://apis.davidcyril.name.ng/pickupline`;
+            const response = await axios.get(apiUrl);
+            
+            if (response.data?.success && response.data?.pickupline) {
+                reply(response.data.pickupline);
+            } else {
+                reply('Failed to fetch pickup line.');
+            }
+        } catch (error) {
+            console.error('Pickupline error:', error);
+            reply('Error fetching pickup line.');
+        }
+    }
+},
+    {
+    command: ['advice', 'advicegenerator', 'lifetips'],
+    operate: async ({ kelvin, m, reply, args, prefix }) => {
+        try {
+            const apiUrl = `https://api.princetechn.com/api/fun/advice?apikey=prince`;
+            const response = await axios.get(apiUrl);
+            
+            if (response.data?.success && response.data?.result) {
+                reply(response.data.result);
+            } else {
+                reply('Failed to fetch advice.');
+            }
+        } catch (error) {
+            console.error('Advice error:', error);
+            reply('Error fetching advice.');
+        }
+    }
+},
+    {
+    command: ['motivation', 'motivate', 'inspire'],
+    operate: async ({ kelvin, m, reply, args, prefix }) => {
+        try {
+            const apiUrl = `https://api.princetechn.com/api/fun/motivation?apikey=prince`;
+            const response = await axios.get(apiUrl);
+            
+            if (response.data?.success && response.data?.result) {
+                reply(response.data.result);
+            } else {
+                reply('Failed to fetch motivation message.');
+            }
+        } catch (error) {
+            console.error('Motivation error:', error);
+            reply('Error fetching motivation message.');
+        }
+    }
+},        
+    {
+        command: ['character', 'char', 'personality'],
+        operate: async ({ kelvin, m, reply, isGroup, from }) => {
+            try {
+                if (!isGroup) {
+                    return reply("This command can only be used in groups.");
+                }
+
+                const mentionedUser = m.message?.extendedTextMessage?.contextInfo?.mentionedJid?.[0];
+                if (!mentionedUser) {
+                    return reply("Please mention a user whose character you want to check.");
+                }
+
+                const userChar = [
+                    "Sigma", "Generous", "Grumpy", "Overconfident", "Obedient",
+                    "Good", "Simp", "Kind", "Patient", "Pervert", "Cool",
+                    "Helpful", "Brilliant", "Sexy", "Single", "Hot", "Gorgeous", "Cute"
+                ];
+
+                const userCharacterSelection = userChar[Math.floor(Math.random() * userChar.length)];
+                const message = `Character of @${mentionedUser.split("@")[0]} is *${userCharacterSelection}* 🔥⚡`;
+
+                await kelvin.sendMessage(from, {
+                    text: message,
+                    mentions: [mentionedUser],
+                }, { quoted: m });
+
+            } catch (e) {
+                console.error("Error in character command:", e);
+                reply("An error occurred while processing the command. Please try again.");
+            }
+        }
+    },
+    {
+  command: ['trivia'],
+  react: "❓",
+  operate: async ({ kelvin, m, reply }) => {
+    try {
+      let res = await fetch("https://opentdb.com/api.php?amount=1");
+      let json = await res.json();
+
+      let question = json.results[0].question;
+      let answer = json.results[0].correct_answer;
+
+      await kelvin.sendMessage(m.chat, { text: `Question: ${question}\n\nThink you know the answer? Sending the correct answer after 20 seconds` }, { quoted: m });
+      
+      setTimeout(async () => {
+        await kelvin.sendMessage(m.chat, { text: `Answer: ${answer}` });
+      }, 20000); // 20 seconds
+    } catch (error) {
+      console.error('Error fetching trivia question:', error);
+      reply('An error occurred while fetching the trivia question.');
+    }
+  }
+},
+{
+  command: ['truthdetector', 'liedetector'],
+  react: "🕵️",
+  operate: async ({ m, reply }) => {
+    if (!m.quoted) return reply(`Please reply to the message you want to detect!`);
+
+    let responses = [
+      "That's a blatant lie!",
+      "Truth revealed!",
+      "Lie alert!",
+      "Hard to believe, but true!",
+      "Professional liar detected!",
+      "Fact-check: TRUE",
+      "Busted! That's a lie!",
+      "Unbelievable, but FALSE!",
+      "Detecting... TRUTH!",
+      "Lie detector activated: FALSE!",
+      "Surprisingly, TRUE!",
+      "My instincts say... LIE!",
+      "That's partially true!",
+      "Can't verify, try again!",
+      "Most likely, TRUE!",
+      "Don't believe you!",
+      "Surprisingly, FALSE!",
+      "Truth!",
+      "Honest as a saint!",
+      "Deceptive much?",
+      "Absolutely true!",
+      "Completely false!",
+      "Seems truthful.",
+      "Not buying it!",
+      "You're lying through your teeth!",
+      "Hard to believe, but it's true!",
+      "I sense honesty.",
+      "Falsehood detected!",
+      "Totally legit!",
+      "Lies, lies, lies!",
+      "You can't fool me!",
+      "Screams truth!",
+      "Fabrication alert!",
+      "Spot on!",
+      "Fishy story, isn't it?",
+      "Unquestionably true!",
+      "Pure fiction!"
+    ];
+
+    let result = responses[Math.floor(Math.random() * responses.length)];
+    let replyText = `*RESULT*: ${result}`;
+
+    await reply(replyText);
+  }
+},
+{
+  command: ['guesscartoon', 'cartoonquiz', 'guesscharacter'],
+  operate: async ({ m, reply, kelvin }) => {
+    try {
+      await reply("🎮 Fetching a cartoon character...");
+      
+      const response = await fetch(`${global.siputzx}/api/games/tebakkartun`);
+      const data = await response.json();
+      
+      if (!data.status || !data.data) {
+        return reply("*Failed to fetch cartoon character.*");
+      }
+      
+      await kelvin.sendMessage(m.chat, {
+        image: { url: data.data.img },
+        caption: `🎪 *GUESS THE CARTOON CHARACTER!*\n\n` +
+                 `Can you name this character?\n\n` +
+                 `Reply with your answer!`
+      }, { quoted: m });
+      
+    } catch (error) {
+      console.error('Game error:', error);
+      reply("❌ Error fetching cartoon game.");
+    }
+  }
+},
+{
+    command: ['riddle', 'teka'],
+    operate: async ({ kelvin, m, reply, args }) => {
+        try {
+            await reply("🧩 *Loading riddle...*");
+            
+            const response = await fetch(`${global.siputzx}/api/games/tekadek`);
+            const data = await response.json();
+            
+            if (!data.status || !data.data) {
+                return reply("Failed to fetch riddle. Try again later.");
+            }
+            
+            const { soal, jawaban } = data.data;
+            
+            let message = `*🧩 TEKA-TEKI / RIDDLE*\n\n`;
+            message += `❓ *Question:*\n${soal}\n\n`;
+            message += `💡 *Answer:* ||${jawaban}||\n\n`;
+            message += `_Reply with .riddle to get another riddle_`;
+            
+            reply(message);
+            
+        } catch (error) {
+            console.error('Riddle error:', error);
+            reply("Error fetching riddle. Try again later.");
+        }
+    }
+}
+    
+];
