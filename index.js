@@ -693,7 +693,7 @@ Faizan.public = mode === 'public';
 │
 ├─❖ *Status:* ✅ ONLINE
 ├─❖ *Bot:* ${global.botname || 'Abbasi-md'}
-├─❖ *Mode:* ${Abbasi.public ? 'PUBLIC' : 'PRIVATE'}
+├─❖ *Mode:* ${global.public ? 'PUBLIC' : 'PRIVATE'}
 ├─❖ *Prefix:* [ ${global.prefixz || '.'} ]
 ├─❖ *Version:* ${global.versions || '2.0.0'}
 ├─❖ *Uptime:* Just Started
