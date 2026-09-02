@@ -688,40 +688,7 @@ Faizan.public = mode === 'public';
         // Start auto-update checker (checks every 24 hours)
         startAutoUpdateChecker(Faizan);
         
-        try {
-            const welcomeMessage = `╭─❖ *Abbasi-md* ❖─╮
-│
-├─❖ *Status:* ✅ ONLINE
-├─❖ *Bot:* ${global.botname || 'Abbasi-md'}
-├─❖ *Mode:* ${global.public ? 'PUBLIC' : 'PRIVATE'}
-├─❖ *Prefix:* [ ${global.prefixz || '.'} ]
-├─❖ *Version:* ${global.versions || '2.0.0'}
-├─❖ *Uptime:* Just Started
-├─❖ *Time:* ${moment().tz(timezones).format('HH:mm:ss')}
-├─❖ *Date:* ${moment().tz(timezones).format('DD/MM/YYYY')}
-│
-├─❖ *Join Our Community*
-├─❖ WhatsApp Channel:
-├─❖ https://whatsapp.com/channel/0029Vb8hgCEJ3jv3EYaWuP1r
-│
-├─❖ 
-├─❖ 
-│
-╰─❖ *Powered by Faizan Tech* ❖─╯
-
-> ${global.wm || '© Abbasi-md is awesome 🔥'}`;
-
-            const ownerJid = normalizeJid(vmd.user.id);
-await vmd.sendMessage(ownerJid, { text: welcomeMessage });
-                
-                setTimeout(() => {
-                    JoinFaizan(vmd;
-                }, 3000);
-            
-            
-        } catch (error) {
-            console.error('Error sending welcome message:', error);
-        }
+       
     }
 });
     
