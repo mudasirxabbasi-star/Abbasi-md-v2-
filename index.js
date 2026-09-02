@@ -453,7 +453,7 @@ async function clientstart() {
     browser: ["Ubuntu", "Chrome", "120.0.0.0"],
     msgRetryCounterCache: msgRetryCounterCache
 });
-
+const vmd = Faizan;
 (async () => {
     try {
         const botNum = await Faizan.decodeJid(Faizan.user.id);
