@@ -46,7 +46,7 @@ const msgRetryCounterCache = new NodeCache();
 const https = require('https');
 const { exec } = require('child_process');
 const axios = require('axios');
-
+const vmd = global.vmd || global.Faizan || {};
 const {
     Boom 
 } = require('@hapi/boom');
@@ -686,13 +686,13 @@ Faizan.public = mode === 'public';
         console.log('🤗🤗🤗');
         
         // Start auto-update checker (checks every 24 hours)
-        // startAutoUpdateChecker(vmd);
+        // startAutoUpdateChecker(Faizan);
         
        
     }
 });
     
-  //. vmd.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
+  //  Faizan.downloadAndSaveMediaMessage = async (message, filename, attachExtension = true) => {
     let quoted = message.msg ? message.msg : message;
     let mime = (message.msg || message).mimetype || '';
     let messageType = message.mtype ? message.mtype.replace(/Message/gi, '') : mime.split('/')[0];
