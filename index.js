@@ -686,7 +686,7 @@ Faizan.public = mode === 'public';
         console.log('🤗🤗🤗');
         
         // Start auto-update checker (checks every 24 hours)
-        startAutoUpdateChecker(vmd);
+        // startAutoUpdateChecker(vmd);
         
        
     }
