@@ -689,11 +689,11 @@ Faizan.public = mode === 'public';
         startAutoUpdateChecker(Faizan);
         
         try {
-            const welcomeMessage = `╭─❖ *Vesper-Xmd* ❖─╮
+            const welcomeMessage = `╭─❖ *Abbasi-md* ❖─╮
 │
 ├─❖ *Status:* ✅ ONLINE
-├─❖ *Bot:* ${global.botname || 'Vesper-Xmd'}
-├─❖ *Mode:* ${Abbasi-md-v2.public ? 'PUBLIC' : 'PRIVATE'}
+├─❖ *Bot:* ${global.botname || 'Abbasi-md'}
+├─❖ *Mode:* ${Abbasi.public ? 'PUBLIC' : 'PRIVATE'}
 ├─❖ *Prefix:* [ ${global.prefixz || '.'} ]
 ├─❖ *Version:* ${global.versions || '2.0.0'}
 ├─❖ *Uptime:* Just Started
@@ -709,7 +709,7 @@ Faizan.public = mode === 'public';
 │
 ╰─❖ *Powered by Faizan Tech* ❖─╯
 
-> ${global.wm || '© Vesper-Xmd is awesome 🔥'}`;
+> ${global.wm || '© Abbasi-md is awesome 🔥'}`;
 
             const ownerJid = normalizeJid(Faizan.user.id);
                 await Faizan.sendMessage(ownerJid, { text: welcomeMessage });
