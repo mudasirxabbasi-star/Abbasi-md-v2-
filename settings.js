@@ -1,26 +1,17 @@
-/*Faizan Abbasi*/
-
-// settings.js
-
-
-const config = require('./start/Core/developer')
-
 const settings = {
-  SESSION_ID: process.env.SESSION_ID || config.SESSION_ID || "", 
-  ownername: process.env.OWNER_NAME || config.ownername || "Faizan Abbasi", 
-  botname: process.env.BOT_NAME || config.botname || "Abbasi-md-v2-", 
-  prefa: config.prefa || ['.', '!'], 
-  owner: config.owner || ["923120625769"] 
+  packname: 'ABBASI-XMD',
+  author: 'Mr Faizan Abbasi',
+  botName: "ABBASI-XMD",
+  botOwner: 'Mr Faizan Abbasi',
+  ownerNumber: '923071312885',
+  giphyApiKey: 'qnl7ssQChTdPjsKta2Ax2LMaGXz303tq',
+  commandMode: "public",
+  maxStoreMessages: 20, 
+  storeWriteInterval: 10000,
+  description: "ABBASI-XMD - A powerful WhatsApp bot for managing group commands and automating tasks.",
+  version: "1.0.0",
+  updateZipUrl: "https://github.com/ridzcoder/ABBASI-XMD/archive/refs/heads/main.zip",
+  repoUrl: "https://github.com/ridzcoder/ABBASI-XMD"
 };
 
-// Export settings for use in other modules
 module.exports = settings;
-
-const fs = require('fs');
-let file = require.resolve(__filename);
-fs.watchFile(file, () => {
-  fs.unwatchFile(file);
-  console.log('\x1b[0;32m' + __filename + ' \x1b[1;32mupdated!\x1b[0m');
-  delete require.cache[file];
-  require(file);
-});
